@@ -8,9 +8,6 @@ class Student:
         self.grades = {}
 
     def __str__(self):
-        name = self.name
-        surname = self.surname
-
         for grade in self.grades.values():
             self.score = grade
 
@@ -48,6 +45,10 @@ class Student:
         else:
             return 'Ошибка'
 
+    def grade_calculation(self, students, course):
+        for key, value in self.grades.items():
+            if course in key:
+                return round(sum(value) / len(students), 1)
 
 class Mentor:
     def __init__(self, name, surname):
@@ -70,52 +71,49 @@ class Lecturer(Mentor):
         super().__init__(name, surname)
         self.grades = {}
     def __str__(self):
-        name = self.name
-        surname = self.surname
-
         for grades in self.grades.values():
             self.score = grades
 
         self.rating = round(sum(self.score) / len(self.score), 1)
-        return f'Имя: {name}\nФамилия: {surname}\nСредняя оценка за лекции: {self.rating}'
+        return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.rating}'
 
     def __gt__(self, other):
         return self.rating > other.rating
 
+    def grade_calculation(self, lecturers, course):
+        for key, value in self.grades.items():
+            if course in key:
+                return round(sum(value) / len(lecturers), 1)
+
 
 class Reviewer(Mentor):
     def __str__(self):
-        name = self.name
-        surname = self.surname
-        return f'Имя: {name}\nФамилия: {surname}'
+        return f'Имя: {self.name}\nФамилия: {self.surname}'
 
 
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python']
+first_student = Student('Christopher', 'Carroll', 'Man')
+second_student = Student('Linda', 'Watson', 'Woman')
+first_student.courses_in_progress += ['Python']
+second_student.courses_in_progress += ['Java']
+first_student.add_courses('C++')
 
-cool_reviewer = Reviewer('Andrey', 'Chebunin')
-cool_reviewer.courses_attached += ['Python']
+first_lecturer = Lecturer('Richard', 'Austin')
+second_lecturer = Lecturer('Amanda', 'Henry')
+first_lecturer.courses_attached += ['Python']
+second_lecturer.courses_attached += ['Java']
 
-cool_reviewer.rate_hw(best_student, 'Python', 10, cool_reviewer)
-cool_reviewer.rate_hw(best_student, 'Python', 10, cool_reviewer)
-cool_reviewer.rate_hw(best_student, 'Python', 10, cool_reviewer)
+first_reviewer = Reviewer('Laura', 'Perez')
+second_reviewer = Reviewer('Everett', 'Sanders')
+first_reviewer.courses_attached += ['Python']
+second_reviewer.courses_attached += ['Java']
 
-best_lecturer = Lecturer('Olga', 'Voronina')
-best_lecturer.courses_attached += ['Python']
+first_student.rate_lecturer(first_lecturer, first_student, 'Python', 10)
+second_student.rate_lecturer(second_lecturer, second_student, 'Java', 9)
+first_reviewer.rate_hw(first_student, 'Python', 10, first_reviewer)
+second_reviewer.rate_hw(second_student, 'Java', 9, second_reviewer)
 
-best_student.rate_lecturer(best_lecturer, best_student, 'Python', 10)
-best_student.rate_lecturer(best_lecturer, best_student, 'Python', 10)
-best_student.rate_lecturer(best_lecturer, best_student, 'Python', 10)
-
-lecturer = Lecturer('User', 'User')
-lecturer.courses_attached += ['Python']
-
-best_student.rate_lecturer(lecturer, best_student, 'Python', 9)
-best_student.rate_lecturer(lecturer, best_student, 'Python', 10)
-best_student.rate_lecturer(lecturer, best_student, 'Python', 10)
-
-print(best_student.grades)
-print(best_lecturer.grades)
-print(cool_reviewer)
-print(best_lecturer)
-print(best_student)
+print(first_student)
+print(first_student > second_student)  # Возникает ошибка, но если принтовать с консоли то все ок.
+print(first_lecturer)
+print(first_lecturer > second_lecturer)  # Возникает ошибка, но если принтовать с консоли то все ок.
+print(first_reviewer)
