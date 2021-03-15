@@ -6,8 +6,12 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
+        self.rating = []
+        self.courses_progress = ''
+        self.courses_finished = ''
+        self.score = ''
 
-    def __str__(self):
+    def greater_than_student(self):
         for grade in self.grades.values():
             self.score = grade
 
@@ -21,6 +25,10 @@ class Student:
                 self.courses_finished = courses_f
 
         self.rating = round(sum(self.score) / len(self.score), 1)
+        return self.rating
+
+    def __str__(self):
+        self.greater_than_student()
         return f'Имя: {self.name}\n' \
                f'Фамилия: {self.surname}\n' \
                f'Средняя оценка за домашние задания: {self.rating}\n' \
@@ -28,7 +36,8 @@ class Student:
                f'Завершенные курсы: {self.courses_finished}'
 
     def __gt__(self, other):
-        return self.rating > other.rating
+        self.greater_than_student()
+        return self.greater_than_student() > other.greater_than_student()
 
     def add_courses(self, course_name):
         self.finished_courses.append(course_name)
@@ -70,15 +79,24 @@ class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grades = {}
-    def __str__(self):
+        self.rating = ''
+        self.score = ''
+
+    def greater_than_lecturer(self):
         for grades in self.grades.values():
             self.score = grades
 
         self.rating = round(sum(self.score) / len(self.score), 1)
+        return self.rating
+
+    def __str__(self):
+        self.greater_than_lecturer()
         return f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.rating}'
 
     def __gt__(self, other):
-        return self.rating > other.rating
+        self.greater_than_lecturer()
+
+        return self.greater_than_lecturer() > other.greater_than_lecturer()
 
     def grade_calculation(self, lecturers, course):
         for key, value in self.grades.items():
@@ -113,7 +131,11 @@ first_reviewer.rate_hw(first_student, 'Python', 10, first_reviewer)
 second_reviewer.rate_hw(second_student, 'Java', 9, second_reviewer)
 
 print(first_student)
-print(first_student > second_student)  # Возникает ошибка, но если принтовать с консоли то все ок.
+print('*' * 5)
+print(first_student > second_student)
+print('*' * 5)
 print(first_lecturer)
-print(first_lecturer > second_lecturer)  # Возникает ошибка, но если принтовать с консоли то все ок.
+print('*' * 5)
+print(first_lecturer > second_lecturer)
+print('*' * 5)
 print(first_reviewer)
